@@ -1,0 +1,358 @@
+@import 'tailwindcss';
+@config "../tailwind.config.js";
+
+:root {
+  --background: #0e0e0e;
+  --surface: #131313;
+  --surface-container-low: #1c1b1b;
+  --surface-container-high: #2a2a2a;
+  --primary: #ffb4a8;
+  --primary-dark: #930000;
+  --on-surface: #e5e2e1;
+  --on-surface-variant: #ebbbb4;
+  --font-display: 'JetBrains Mono', monospace;
+  --font-body: 'JetBrains Mono', monospace;
+  --font-label: 'JetBrains Mono', monospace;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: var(--background);
+    color: var(--on-surface);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--primary);
+    font-family: var(--font-display);
+    letter-spacing: 0;
+  }
+
+  a,
+  button,
+  input {
+    font: inherit;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--background);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--primary-dark);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+  }
+}
+
+@layer utilities {
+  .brutalist-border {
+    border: 1px solid var(--primary-dark);
+  }
+
+  .scanlines {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0.3;
+    background:
+      linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+      linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size:
+      100% 4px,
+      3px 100%;
+  }
+
+  .status-blink {
+    animation: blink 1s step-end infinite;
+  }
+
+  .pulse-badge {
+    animation: pulse-green 2s infinite;
+  }
+
+  .hero-glitch-text {
+    display: inline-block;
+    transition: transform 0.1s ease;
+  }
+
+  .hero-glitch-text:hover {
+    animation: jitter 0.2s infinite;
+  }
+
+  .physics-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+  }
+
+  .uplink-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-label);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #910904;
+    transition: color 0.2s ease;
+  }
+
+  .uplink-link:hover {
+    color: var(--primary);
+    text-decoration: underline;
+  }
+
+  .terminal-panel {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .terminal-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, rgba(255, 180, 168, 0.12), transparent);
+    transform: translateX(-120%);
+    animation: terminal-sweep 5s ease-in-out infinite;
+  }
+
+  .terminal-line,
+  .terminal-copy {
+    opacity: 0;
+    transform: translateY(8px);
+    animation: terminal-reveal 520ms ease forwards;
+  }
+
+  .terminal-copy {
+    animation-delay: 680ms;
+  }
+
+  .animated-card {
+    position: relative;
+    overflow: hidden;
+    transition:
+      transform 180ms ease,
+      border-color 180ms ease,
+      box-shadow 180ms ease,
+      background-color 180ms ease;
+  }
+
+  .animated-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(115deg, transparent 20%, rgba(255, 180, 168, 0.16), transparent 80%);
+    transform: translateX(-120%);
+    animation: metric-scan 4.5s ease-in-out infinite;
+  }
+
+  .animated-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary);
+    background-color: rgba(32, 31, 31, 0.75);
+    box-shadow: 0 0 28px rgba(255, 180, 168, 0.14);
+  }
+
+  .hero-action {
+    position: relative;
+    overflow: hidden;
+    transition:
+      transform 180ms ease,
+      box-shadow 180ms ease,
+      background-color 180ms ease,
+      color 180ms ease;
+  }
+
+  .hero-action:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 24px rgba(255, 180, 168, 0.2);
+  }
+
+  .hero-action-primary {
+    animation: action-pulse 2.8s ease-in-out infinite;
+  }
+
+  .academic-card {
+    position: relative;
+    overflow: hidden;
+    animation: academic-enter 700ms ease both;
+    transition:
+      transform 220ms ease,
+      box-shadow 220ms ease;
+  }
+
+  .academic-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border: 1px solid rgba(147, 0, 0, 0.18);
+    opacity: 0;
+    animation: academic-border-pulse 3.2s ease-in-out infinite;
+  }
+
+  .academic-card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 14px 14px 0 #930000;
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-green {
+  0% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+  }
+}
+
+@keyframes jitter {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-1px, 1px);
+  }
+  50% {
+    transform: translate(1px, -1px);
+  }
+  75% {
+    transform: translate(-1px, -1px);
+  }
+  100% {
+    transform: translate(1px, 1px);
+  }
+}
+
+@keyframes terminal-reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes terminal-sweep {
+  0%,
+  45% {
+    transform: translateX(-120%);
+  }
+  70%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes metric-scan {
+  0%,
+  55% {
+    transform: translateX(-120%);
+  }
+  85%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes action-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(255, 180, 168, 0);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(255, 180, 168, 0.28);
+  }
+}
+
+@keyframes academic-enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes academic-border-pulse {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.focus\:not-sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}

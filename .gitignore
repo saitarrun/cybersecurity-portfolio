@@ -1,0 +1,110 @@
+# Build output
+dist/
+dist-ssr/
+build/
+out/
+*.local
+
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Environment variables (NEVER commit secrets)
+.env
+.env.local
+.env.*.local
+.env.production
+
+# IDE/Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Testing
+coverage/
+.nyc_output/
+/test-results/
+/playwright-report/
+/blob-report/
+
+# Vercel
+.vercel
+
+# Agent/LLM tools
+.agents/
+.claude/worktrees/
+skills-lock.json
+
+# Playwright/Browser testing
+/playwright/.cache/
+
+# macOS
+.AppleDouble
+.AppleDB
+*.swp
+*~
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# Misc
+*.bak
+*.tmp
+*.swp
+
+# Secrets & Certificates (NEVER commit)
+*.key
+*.pem
+*.p12
+*.pfx
+*.cer
+*.crt
+*.pub
+secrets/
+.secrets
+credentials.json
+service-account-*.json
+firebase-*.json
+google-*.json
+aws-credentials
+.aws/
+.gcp/
+
+# Documentation & Standards (internal, non-code)
+*STANDARDS*.md
+*GUIDELINES*.md
+*CODE-*.md
+SECURITY*.md
+PRODUCTION*.md
+*.standards.md
+*.guidelines.md
+docs/standards/
+docs/guidelines/
+.standards/
+.guidelines/

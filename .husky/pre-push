@@ -1,0 +1,60 @@
+#!/bin/sh
+# Enforce quality gates before push to prevent broken builds
+
+set -e
+
+echo "🔍 Running quality checks before push..."
+echo ""
+
+# Get current branch
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+# Prevent direct push to main
+if [ "$BRANCH" = "main" ]; then
+  echo "❌ ERROR: Cannot push directly to main branch"
+  echo "   Create a pull request instead"
+  exit 1
+fi
+
+echo "✓ Branch protection: OK (not pushing to main)"
+echo ""
+
+# Type check
+echo "📋 Running TypeScript type check..."
+npm run type-check || {
+  echo "❌ Type check failed"
+  exit 1
+}
+echo "✓ Type check: PASSED"
+echo ""
+
+# Lint
+echo "🔧 Running ESLint..."
+npm run lint || {
+  echo "❌ Linting failed"
+  echo "   Run: npm run lint:fix"
+  exit 1
+}
+echo "✓ ESLint: PASSED"
+echo ""
+
+# Format check
+echo "🎨 Checking code formatting..."
+npm run format:check || {
+  echo "❌ Code formatting inconsistent"
+  echo "   Run: npm run format"
+  exit 1
+}
+echo "✓ Formatting: PASSED"
+echo ""
+
+# Build
+echo "🏗️  Building project..."
+npm run build || {
+  echo "❌ Build failed"
+  exit 1
+}
+echo "✓ Build: PASSED"
+echo ""
+
+echo "✅ All quality gates passed. Proceeding with push..."

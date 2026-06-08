@@ -1,0 +1,122 @@
+[
+  {
+    "id": "profile-summary",
+    "topic": "profile",
+    "title": "About Sai Tarrun Pitta",
+    "text": "Sai Tarrun Pitta is a cybersecurity enthusiast with hands-on experience in penetration testing, red teaming, and security operations. He has completed multiple TryHackMe learning paths including Jr Penetration Tester, SOC Level 1 and 2, Red Teaming, and Cyber Defense. He is passionate about offensive and defensive security, ethical hacking, and building detection capabilities. He is currently pursuing a Master of Science in Computer Science at California State University Fullerton."
+  },
+  {
+    "id": "contact-info",
+    "topic": "contact",
+    "title": "Contact Information",
+    "text": "Sai Tarrun Pitta can be reached at email: saitarrunpitta@gmail.com. LinkedIn: linkedin.com/in/saitarrunpitta. GitHub: github.com/saitarrun. TryHackMe: tryhackme.com/p/TarrunXploit404. Cybersecurity portfolio: https://cyber.saitarrun.dev."
+  },
+  {
+    "id": "availability",
+    "topic": "profile",
+    "title": "Job Availability",
+    "text": "Sai Tarrun Pitta is currently available for cybersecurity roles including penetration testing, red teaming, SOC analyst, and security engineer positions. He is based in California and is open to both remote and on-site opportunities."
+  },
+  {
+    "id": "experience-jr-pentester",
+    "topic": "experience",
+    "title": "TryHackMe - Jr Penetration Tester Path",
+    "text": "Sai completed the TryHackMe Jr Penetration Tester path covering 40+ rooms on web application exploitation, network penetration testing, and privilege escalation. He mastered Metasploit Framework for exploitation and post-exploitation, Burp Suite Pro for intercepting HTTP traffic and identifying OWASP Top 10 vulnerabilities including SQL injection, XSS, IDOR, and SSRF. He used Nmap, Gobuster, and Nikto for enumeration and exploited misconfigured Linux/Windows services via SUID binaries, cronjobs, and kernel exploits."
+  },
+  {
+    "id": "experience-soc",
+    "topic": "experience",
+    "title": "TryHackMe - SOC Level 1 & 2 Paths",
+    "text": "Sai completed the TryHackMe SOC Level 1 and Level 2 paths covering SIEM configuration, log analysis, alert triage, and incident response. He worked with Splunk and ELK Stack (Elasticsearch, Logstash, Kibana) for security event correlation and visualisation. He analysed network traffic with Wireshark and Zeek to detect anomalies and C2 beaconing. He deployed Snort and Suricata IDS rules and conducted threat hunting using the MITRE ATT&CK framework."
+  },
+  {
+    "id": "experience-red-teaming",
+    "topic": "experience",
+    "title": "TryHackMe - Red Teaming Path",
+    "text": "Sai completed the TryHackMe Red Teaming path simulating full kill-chain attacks against Active Directory environments covering initial access, lateral movement, and domain compromise. He deployed C2 frameworks, executed phishing campaigns with GoPhish and SET, performed BloodHound/SharpHound AD enumeration to identify Kerberoastable accounts and DCSync targets, and practised OPSEC tradecraft including LOLBins and memory-only execution."
+  },
+  {
+    "id": "project-vuln-scanner",
+    "topic": "projects",
+    "title": "Network Vulnerability Scanner",
+    "text": "Sai built a network vulnerability scanner using Python, Nmap, SQLite, FastAPI, and React. The tool automates network reconnaissance by orchestrating Nmap scans, parsing XML output, scoring CVE severity, and exposing results via a REST API with a React dashboard for visualisation."
+  },
+  {
+    "id": "project-ctf",
+    "topic": "projects",
+    "title": "CTF Write-up Collection",
+    "text": "Sai documented 20+ TryHackMe and HackTheBox CTF solutions using Python, Burp Suite, Pwntools, and GDB. The collection covers web exploitation, binary exploitation, reverse engineering, and forensics challenges with step-by-step methodology notes."
+  },
+  {
+    "id": "project-ad-lab",
+    "topic": "projects",
+    "title": "Active Directory Attack Lab",
+    "text": "Sai built a home lab simulating a corporate Active Directory environment with Windows Server DC and domain-joined clients using PowerShell, BloodHound, and Impacket on VMware. The lab is used to practise Kerberoasting, Pass-the-Hash, DCSync, and Golden Ticket attacks in an isolated network."
+  },
+  {
+    "id": "project-siem",
+    "topic": "projects",
+    "title": "SIEM Detection Rules Engine",
+    "text": "Sai built a custom detection rule library mapped to MITRE ATT&CK techniques using Splunk SPL, Python, Sigma, and ELK. The project includes Sigma rules converted for Splunk and ELK, automated alert pipelines, and a Python script to validate detection coverage against the ATT&CK matrix."
+  },
+  {
+    "id": "skills-offensive",
+    "topic": "skills",
+    "title": "Offensive Security Skills",
+    "text": "Sai's offensive security skills include Metasploit Framework, exploit development, SQL injection, XSS, buffer overflow exploitation, and privilege escalation on Linux and Windows. He is proficient with Burp Suite Pro for web application testing."
+  },
+  {
+    "id": "skills-red-team",
+    "topic": "skills",
+    "title": "Red Teaming Skills",
+    "text": "Sai's red teaming skills include C2 framework operation, Active Directory attacks, lateral movement techniques, phishing campaign execution, OPSEC tradecraft, and BloodHound-based attack path analysis."
+  },
+  {
+    "id": "skills-soc",
+    "topic": "skills",
+    "title": "SOC and Monitoring Skills",
+    "text": "Sai's SOC skills include Splunk, ELK Stack, Snort, Suricata, Wireshark, alert triage, and incident response. He can configure SIEM rules, correlate security events, and respond to incidents using structured methodologies."
+  },
+  {
+    "id": "skills-threat-intel",
+    "topic": "skills",
+    "title": "Threat Intelligence Skills",
+    "text": "Sai's threat intelligence skills include MITRE ATT&CK framework mapping, OSINT techniques, IOC analysis, threat hunting, Sigma rule authoring, and YARA rule writing for malware detection."
+  },
+  {
+    "id": "skills-web",
+    "topic": "skills",
+    "title": "Web Application Security Skills",
+    "text": "Sai's web security skills cover OWASP Top 10, Burp Suite, IDOR, SSRF, XXE, and insecure deserialization. He can identify and exploit web vulnerabilities and document findings in professional reports."
+  },
+  {
+    "id": "skills-network",
+    "topic": "skills",
+    "title": "Network Security Skills",
+    "text": "Sai's network security skills include TCP/IP protocol analysis, Nmap enumeration, Nessus vulnerability scanning, firewall configuration, VPN, and IDS/IPS deployment."
+  },
+  {
+    "id": "skills-forensics",
+    "topic": "skills",
+    "title": "Digital Forensics Skills",
+    "text": "Sai's digital forensics skills include memory analysis with Volatility, disk forensics with Autopsy, log analysis, and steganography techniques."
+  },
+  {
+    "id": "skills-scripting",
+    "topic": "skills",
+    "title": "Scripting and Tools",
+    "text": "Sai is proficient in Python, Bash, and PowerShell scripting for automation of security tasks. He regularly uses Gobuster, Hydra, and John the Ripper for enumeration and cracking."
+  },
+  {
+    "id": "skills-cloud",
+    "topic": "skills",
+    "title": "Cloud Security Skills",
+    "text": "Sai's cloud security skills include AWS IAM misconfiguration testing, S3 bucket exposure analysis, Azure AD enumeration, cloud pentesting, secrets management, and CSPM tooling."
+  },
+  {
+    "id": "education",
+    "topic": "education",
+    "title": "Education - CSUF MSCS",
+    "text": "Sai Tarrun Pitta is pursuing a Master of Science in Computer Science at California State University, Fullerton from August 2024 to May 2026. He published a peer-reviewed IEEE conference paper titled 'Hardware Trojan Detection with Machine Learning and Power Side-Channels: A Post-Deployment Analysis' at IEEE CNS 2025. His coursework includes Advanced Algorithms, Cloud Computing, System Design, Machine Learning, and Artificial Intelligence."
+  }
+]

@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /.well-known/
+
+Sitemap: https://saitarrun.dev/sitemap.xml
+
+# Crawl delay (milliseconds)
+Crawl-delay: 1
