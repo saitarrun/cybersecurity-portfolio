@@ -38,8 +38,8 @@ const ALLOWED_ORIGINS = new Set([
 function isAllowedOrigin(origin: string | undefined): boolean {
   if (!origin) return false;
   if (ALLOWED_ORIGINS.has(origin)) return true;
-  // Vercel preview deployments for this project
-  return /^https:\/\/cybersecurity-portfolio[a-z0-9-]*-saitarruns-projects\.vercel\.app$/.test(
+  // Vercel preview and alias deployments for this project
+  return /^https:\/\/cybersecurity-portfolio[a-z0-9-]*(?:-saitarruns-projects)?\.vercel\.app$/.test(
     origin
   );
 }
@@ -168,7 +168,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         'X-Title': 'Sai Tarrun Portfolio Chatbot',
       },
       body: JSON.stringify({
-        model: 'openai/gpt-oss-120b:free',
+        model: 'meta-llama/llama-3.3-70b-instruct:free',
         messages: [{ role: 'system', content: systemPrompt }, ...messages],
         stream: true,
         max_tokens: 512,
