@@ -1,6 +1,11 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import knowledgeBase from '../src/data/knowledge-base.json' with { type: 'json' };
 import { retrieveChunks as retrieve, type KnowledgeChunk } from '../src/utils/retrieval';
+
+const knowledgeBase = JSON.parse(
+  readFileSync(join(process.cwd(), 'src/data/knowledge-base.json'), 'utf-8')
+) as KnowledgeChunk[];
 
 type Chunk = KnowledgeChunk;
 
