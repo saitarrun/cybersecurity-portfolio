@@ -30,7 +30,7 @@ const navItems = [
   { href: '#nodes', label: 'ARCHIVES', icon: Network },
   {
     href: SOFTWARE_PORTFOLIO_URL,
-    label: 'SOFTWARE',
+    label: 'SOFTWARE_PORTFOLIO',
     icon: Terminal,
     isSoftwareLink: true,
   },
