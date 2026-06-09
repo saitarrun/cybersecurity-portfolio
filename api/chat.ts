@@ -1,7 +1,13 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import { retrieveChunks as retrieve, type KnowledgeChunk } from '../src/utils/retrieval';
+
+interface KnowledgeChunk {
+  id: string;
+  topic: string;
+  title: string;
+  text: string;
+}
 
 const knowledgeBase = JSON.parse(
   readFileSync(join(process.cwd(), 'src/data/knowledge-base.json'), 'utf-8')
@@ -50,8 +56,39 @@ function isAllowedOrigin(origin: string | undefined): boolean {
 }
 
 // ── RAG ───────────────────────────────────────────────────────────────────────
+function tokenize(text: string): string[] {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .split(/\s+/)
+    .filter((token) => token.length > 2);
+}
+
+function scoreChunk(chunk: KnowledgeChunk, queryTokens: string[]): number {
+  const chunkTokens = tokenize(`${chunk.title} ${chunk.text}`);
+  const titleTokens = tokenize(chunk.title);
+  const chunkSet = new Set(chunkTokens);
+
+  let score = 0;
+  for (const token of queryTokens) {
+    if (chunkSet.has(token)) {
+      score += titleTokens.includes(token) ? 2 : 1;
+    }
+  }
+
+  return score / Math.max(queryTokens.length, 1);
+}
+
 function retrieveChunks(query: string, topK = 4): Chunk[] {
-  return retrieve(query, knowledgeBase as Chunk[], topK);
+  const queryTokens = tokenize(query);
+  if (queryTokens.length === 0) return knowledgeBase.slice(0, topK);
+
+  return knowledgeBase
+    .map((chunk) => ({ chunk, score: scoreChunk(chunk, queryTokens) }))
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, topK)
+    .map(({ chunk }) => chunk);
 }
 
 function buildSystemPrompt(chunks: Chunk[]): string {
@@ -72,6 +109,39 @@ RULES:
 
 CONTEXT:
 ${context}`;
+}
+
+function buildFallbackAnswer(query: string, chunks: Chunk[]): string {
+  const lowerQuery = query.toLowerCase();
+  const relevantChunks = chunks.length > 0 ? chunks : knowledgeBase.slice(0, 2);
+
+  if (lowerQuery.includes('contact') || lowerQuery.includes('email') || lowerQuery.includes('linkedin')) {
+    return 'You can contact Sai through the uplink links on this portfolio, including **Email**, **GitHub**, and **LinkedIn**.';
+  }
+
+  if (lowerQuery.includes('project') || lowerQuery.includes('portfolio')) {
+    const projectChunk = relevantChunks.find((chunk) => /project/i.test(`${chunk.title} ${chunk.text}`));
+    return projectChunk
+      ? projectChunk.text.slice(0, 420)
+      : 'Sai has built cybersecurity projects around vulnerability scanning, CTF write-ups, Active Directory attack labs, and SIEM detection rules.';
+  }
+
+  const summary = relevantChunks
+    .map((chunk) => chunk.text)
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (!summary) {
+    return 'Sai Tarrun Pitta is focused on cybersecurity, including penetration testing, red-team labs, detection engineering, TryHackMe training, and security-focused projects.';
+  }
+
+  return summary.length > 520 ? `${summary.slice(0, 517).trim()}...` : summary;
+}
+
+function writeSseDelta(res: VercelResponse, text: string) {
+  res.write(`data: ${JSON.stringify({ delta: text })}\n\n`);
+  res.write('data: [DONE]\n\n');
 }
 
 // ── Handler ───────────────────────────────────────────────────────────────────
@@ -112,9 +182,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const apiKey = process.env.OPENROUTER_API_KEY;
-  if (!apiKey) {
-    return res.status(500).json({ error: 'Chat service is not configured.' });
-  }
 
   let message: string;
   let history: Message[];
@@ -163,6 +230,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
 
+  if (!apiKey) {
+    writeSseDelta(res, buildFallbackAnswer(sanitized, chunks));
+    return res.end();
+  }
+
   try {
     const upstream = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
@@ -173,7 +245,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         'X-Title': 'Sai Tarrun Portfolio Chatbot',
       },
       body: JSON.stringify({
-        model: 'meta-llama/llama-3.3-70b-instruct:free',
+        model: 'openai/gpt-oss-120b:free',
         messages: [{ role: 'system', content: systemPrompt }, ...messages],
         stream: true,
         max_tokens: 512,
@@ -184,12 +256,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!upstream.ok) {
       const errText = await upstream.text();
       console.error('OpenRouter error:', upstream.status, errText);
-      res.write(`data: ${JSON.stringify({ error: 'LLM service error' })}\n\n`);
+      writeSseDelta(res, buildFallbackAnswer(sanitized, chunks));
       return res.end();
     }
 
     if (!upstream.body) {
-      res.write(`data: ${JSON.stringify({ error: 'No response body' })}\n\n`);
+      writeSseDelta(res, buildFallbackAnswer(sanitized, chunks));
       return res.end();
     }
 
@@ -224,7 +296,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
   } catch (err) {
     console.error('Chat handler error:', err);
-    res.write(`data: ${JSON.stringify({ error: 'Unexpected error' })}\n\n`);
+    writeSseDelta(res, buildFallbackAnswer(sanitized, chunks));
   }
 
   res.end();

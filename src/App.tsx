@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import type { FormEvent, MouseEvent } from 'react';
 import {
   Activity,
   ArrowRight,
@@ -19,12 +20,20 @@ import {
 } from 'lucide-react';
 import { education, experiences, projects, skillGroups } from './data/portfolio';
 
+const SOFTWARE_PORTFOLIO_URL = 'https://software-engineer-portfolio-wuzw.vercel.app/';
+
 const navItems = [
   { href: '#bios', label: 'BIOS', icon: BrainCircuit },
   { href: '#training', label: 'LAB_LOGS', icon: Shield },
   { href: '#certifications', label: 'CERTS', icon: Award },
   { href: '#modules', label: 'SKILLS_MATRIX', icon: MemoryStick },
   { href: '#nodes', label: 'ARCHIVES', icon: Network },
+  {
+    href: SOFTWARE_PORTFOLIO_URL,
+    label: 'SOFTWARE',
+    icon: Terminal,
+    isSoftwareLink: true,
+  },
   { href: '#uplink', label: 'UPLINK', icon: LockKeyhole },
 ];
 
@@ -96,6 +105,7 @@ type ChatMessage = {
   role: 'user' | 'assistant';
   content: string;
 };
+
 
 function formatUptime(totalSeconds: number) {
   const hours = Math.floor(totalSeconds / 3600);
@@ -244,17 +254,24 @@ function ParticleCanvas() {
   return <canvas ref={canvasRef} className="physics-canvas" aria-hidden="true" />;
 }
 
-function TopNav() {
+function TopNav({
+  onSoftwareNavigate,
+}: {
+  onSoftwareNavigate: (event: MouseEvent<HTMLAnchorElement>, href: string) => void;
+}) {
   return (
     <header className="fixed top-0 z-50 flex h-16 w-full items-center justify-between border-b border-[#930000] bg-[#0e0e0e]/85 px-4 backdrop-blur-md md:px-8">
       <a href="#bios" className="font-label text-lg font-bold tracking-tight text-[#ffb4a8]">
         SYS_PORTFOLIO_V2.0
       </a>
-      <nav className="hidden gap-8 md:flex" aria-label="Primary">
-        {navItems.slice(0, 4).map((item) => (
+      <nav className="hidden gap-5 md:flex" aria-label="Primary">
+        {navItems.slice(0, 6).map((item) => (
           <a
             key={item.href}
             href={item.href}
+            onClick={
+              item.isSoftwareLink ? (event) => onSoftwareNavigate(event, item.href) : undefined
+            }
             className="font-label text-xs font-semibold text-[#930000] transition-colors hover:text-[#ffb4a8]"
           >
             {item.label}
@@ -295,7 +312,11 @@ function TopNav() {
   );
 }
 
-function SideNav() {
+function SideNav({
+  onSoftwareNavigate,
+}: {
+  onSoftwareNavigate: (event: MouseEvent<HTMLAnchorElement>, href: string) => void;
+}) {
   const telemetry = useLiveTelemetry();
 
   return (
@@ -311,6 +332,9 @@ function SideNav() {
             <a
               key={item.href}
               href={item.href}
+              onClick={
+                item.isSoftwareLink ? (event) => onSoftwareNavigate(event, item.href) : undefined
+              }
               className={`flex items-center gap-4 px-4 py-3 font-label text-xs font-semibold transition-all ${
                 index === 0
                   ? 'translate-x-1 border-l-4 border-[#ffb4a8] text-[#ffb4a8]'
@@ -684,7 +708,7 @@ function ChatWidget() {
     });
   }, [messages]);
 
-  const sendMessage = async (event: React.FormEvent<HTMLFormElement>) => {
+  const sendMessage = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const text = input.trim();
     if (!text || isSending) return;
@@ -790,12 +814,75 @@ function ChatWidget() {
   );
 }
 
+function SoftwareTransitionOverlay() {
+  return (
+    <div className="software-transition" role="status" aria-live="assertive" aria-label="Opening software engineering portfolio">
+      <div className="software-ide-grid" aria-hidden="true" />
+      <div className="software-terminal">
+        <div className="software-terminal-titlebar">
+          <div className="flex items-center gap-2">
+            <span className="h-2.5 w-2.5 bg-[#930000]" />
+            <span className="h-2.5 w-2.5 bg-[#ffb4a8]" />
+            <span className="h-2.5 w-2.5 bg-green-500" />
+          </div>
+          <span>software-engineering.build</span>
+        </div>
+        <div className="software-terminal-body">
+          <div className="software-code-line text-[#930000]">~/SYS_PORTFOLIO_V2.0</div>
+          <div className="software-code-line software-type-1">
+            <span className="text-[#ffb4a8]">$</span> npm run compile:software
+          </div>
+          <div className="software-code-line software-type-2">
+            <span className="text-[#ffb4a8]">&gt;</span> bundling full-stack modules...
+          </div>
+          <div className="software-code-line software-type-3">
+            <span className="text-[#ffb4a8]">&gt;</span> resolving production route...
+          </div>
+          <div className="software-progress-shell" aria-hidden="true">
+            <div className="software-progress-bar" />
+          </div>
+          <div className="software-success">
+            BUILD SUCCESSFUL<span className="software-cursor" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function App() {
+  const [isSoftwareTransitioning, setIsSoftwareTransitioning] = useState(false);
+  const redirectTimerRef = useRef<number | null>(null);
+  const failsafeTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (redirectTimerRef.current) window.clearTimeout(redirectTimerRef.current);
+      if (failsafeTimerRef.current) window.clearTimeout(failsafeTimerRef.current);
+    };
+  }, []);
+
+  const handleSoftwareNavigate = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
+    event.preventDefault();
+    if (isSoftwareTransitioning) return;
+
+    setIsSoftwareTransitioning(true);
+
+    redirectTimerRef.current = window.setTimeout(() => {
+      window.location.assign(href);
+    }, 1500);
+
+    failsafeTimerRef.current = window.setTimeout(() => {
+      window.location.replace(href);
+    }, 3200);
+  };
+
   return (
     <div className="min-h-screen bg-[#0e0e0e] font-body text-[#e5e2e1] selection:bg-[#930000] selection:text-[#ffdad4]">
       <div className="scanlines" />
-      <TopNav />
-      <SideNav />
+      {isSoftwareTransitioning && <SoftwareTransitionOverlay />}
+      <TopNav onSoftwareNavigate={handleSoftwareNavigate} />
+      <SideNav onSoftwareNavigate={handleSoftwareNavigate} />
       <ChatWidget />
       <main id="main" className="min-h-screen pt-16 lg:ml-[240px]">
         <Hero />
