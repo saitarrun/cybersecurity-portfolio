@@ -1,6 +1,9 @@
+import { createRequire } from 'node:module';
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import knowledgeBase from '../src/data/knowledge-base.json';
 import { retrieveChunks as retrieve, type KnowledgeChunk } from '../src/utils/retrieval';
+
+const require = createRequire(import.meta.url);
+const knowledgeBase = require('../src/data/knowledge-base.json') as KnowledgeChunk[];
 
 type Chunk = KnowledgeChunk;
 
